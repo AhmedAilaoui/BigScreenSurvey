@@ -1,0 +1,80 @@
+.results-form {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.results-form h2 {
+  text-align: center;
+  color: #2d3748;
+  margin-bottom: 2rem;
+}
+
+.results-info {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.results-info p {
+  margin: 0.5rem 0;
+  color: #4a5568;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.result-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.result-card h3 {
+  color: #3f1dff;
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.question-text {
+  color: #2d3748;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.answer-text {
+  color: #4a5568;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.submit-result {
+  text-align: center;
+  padding: 2rem;
+}
+
+.response-link {
+  margin-top: 2rem;
+}
+
+.result-link {
+  display: inline-block;
+  background-color: #3f1dff;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.result-link:hover {
+  background-color: #07327d;
+}
