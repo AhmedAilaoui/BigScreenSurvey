@@ -1,0 +1,67 @@
+import axios from "axios";
+
+// Get CSRF cookie
+export const getCsrfCookie = async () => {
+  try {
+    await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
+  } catch (error) {
+    console.error("CSRF cookie error:", error);
+    throw error;
+  }
+};
+
+// API client configuration
+const apiClient = axios.create({
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8000/api",
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+// Request interceptor for adding the CSRF token and auth token
+apiClient.interceptors.request.use(
+  async (config) => {
+    // Add auth token if available
+    const authToken = localStorage.getItem("admin_token");
+    if (authToken) {
+      config.headers["Authorization"] = `Bearer ${authToken}`;
+    }
+
+    // Get CSRF token for all POST, PUT, DELETE requests and admin routes
+    if (
+      ["post", "put", "delete"].includes(config.method?.toLowerCase()) ||
+      config.url.includes("/admin/")
+    ) {
+      await getCsrfCookie();
+      const token = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1];
+
+      if (token) {
+        config.headers["X-XSRF-TOKEN"] = decodeURIComponent(token);
+      }
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Response interceptor for handling errors
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 419) {
+      // If CSRF token is invalid or expired, try to get a new one
+      await getCsrfCookie();
+      return apiClient(error.config);
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default apiClient;
